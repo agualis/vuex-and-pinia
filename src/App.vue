@@ -1,18 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <h2>Vuex counter</h2>
+    <p>{{ counter }}</p>
+    <p>
+      <button @click="increment">+</button>
+      <button @click="decrement">-</button>
+    </p>
+
+    <h2>Pinia counter</h2>
+    <p>{{ piniaCount }}</p>
+    <p>
+      <button @click="incrementPinia">+</button>
+      <button @click="decrementPinia">-</button>
+    </p>
+</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import { mapState, mapActions } from 'pinia'
+import { useStore } from './stores/pinia-store'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  computed: {
+    ...mapState(useStore, {piniaCount: 'counter'}),
+      counter () {
+          return this.$store.state.counter
+      }
+    },
+    methods: {
+      ...mapActions(useStore, {
+        incrementPinia: 'increment',
+        decrementPinia: 'decrement',
+      }),
+      increment () {
+        this.$store.commit('increment')
+      },
+      decrement () {
+          this.$store.commit('decrement')
+      },
+    }
 }
 </script>
 
